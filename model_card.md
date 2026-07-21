@@ -1,111 +1,43 @@
 # 🎧 Model Card: Music Recommender Simulation
 
-## 1. Model Name  
+## Model Name
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+VibeMatch 1.0. The name reflects the idea of matching songs to a user's preferred musical vibe.
 
----
+## Goal / Task
 
-## 2. Intended Use  
+This recommender compares songs with an individual user profile and suggests the strongest matches. The current system uses genre, mood, energy, and danceability to build a simple recommendation score.
 
-Describe what your recommender is designed to do and who it is for. 
+## Data Used
 
-Prompts:  
+The recommender uses the catalog in data/songs.csv. The file contains 20 songs and includes each song's ID, title, artist, genre, mood, energy, tempo, valence, danceability, and acousticness. The first recommendation algorithm only uses genre, mood, energy, and danceability. The dataset is small, so it may not represent every genre, artist, culture, or musical preference fairly.
 
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+## Algorithm Summary
 
----
+The scoring system starts from zero and adds points for how well a song matches the user's preferences. An exact genre match gives 3 points, an exact mood match gives 3 points, energy similarity gives up to 2 points, and danceability similarity gives up to 2 points. The maximum possible score is 10 points. Energy and danceability are scored by closeness to the user's preferred values, so higher values are not automatically better. Every song receives a score, the songs are sorted from highest to lowest, and the top results are recommended.
 
-## 3. How the Model Works  
+## Observed Behavior / Biases
 
-Explain your scoring approach in simple language.  
+The system can overvalue exact genre and mood matches because those features contribute six of the ten points. Related moods such as focused and chill receive no partial credit, even if they feel similar. A song can match a user's energy and danceability well but still rank lower if its genre or mood is different. The small catalog can also make the recommendations feel narrow or repetitive.
 
-Prompts:  
+## Evaluation Process
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
+The behavior of the recommender was checked with pytest unit tests and CLI-based integration tests. The tests covered CSV loading and type conversion, perfect and partial matches, numerical boundary values, invalid input, top-k ranking, empty input, negative-k handling, and mutation protection. The final pytest run reported 21 passed tests. The system was also compared using a pop/happy profile and a lofi/focused profile, and changing the profile changed which songs ranked highest.
 
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+## Intended Use
 
----
+This system is intended for learning how recommendation systems work. It is useful for demonstrating content-based filtering, practicing Python, CSV processing, scoring, ranking, testing, and documentation, and experimenting with small song catalogs and user profiles.
 
-## 4. Data  
+## Non-Intended Use
 
-Describe the dataset the model uses.  
+This system should not be used as a production replacement for services like Spotify or YouTube Music. It should not be used to make high-stakes decisions, to judge the quality of artists or songs, or to represent every listener's musical taste. It also should not be treated as a reliable recommendation tool for a large commercial catalog.
 
-Prompts:  
+## Ideas for Improvement
 
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+A future version could update user profiles using likes, skips, saves, replays, and listening history. It could also give partial points for related genres and moods instead of relying only on exact matches. Adding diversity-aware ranking would help the top recommendations feel less repetitive and would make the system more useful for real users.
 
----
+## Personal Reflection
 
-## 5. Strengths  
+The biggest learning moment was understanding the difference between scoring one song and ranking the whole catalog. A recommendation is not just about whether a song is good in general; it depends on how well it matches a specific user profile.
 
-Where does your system seem to work well  
-
-Prompts:  
-
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
-
----
-
-## 6. Limitations and Bias 
-
-Where the system struggles or behaves unfairly. 
-
-Prompts:  
-
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
-
----
-
-## 7. Evaluation  
-
-How you checked whether the recommender behaved as expected. 
-
-Prompts:  
-
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
-
-No need for numeric metrics unless you created some.
-
----
-
-## 8. Future Work  
-
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
-
----
-
-## 9. Personal Reflection  
-
-A few sentences about your experience.  
-
-Prompts:  
-
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+AI helped a lot with brainstorming the architecture, scoring rules, tests, edge cases, refactoring, and documentation. The work still needed to be checked carefully, though, because some pytest tests initially failed and the CLI exposed a mismatch between the recommendation structure and the main script. It was also surprising that a simple weighted algorithm could still feel personalized. A future version would add behavior-based learning, partial-match logic, and more diversity in the recommendations.
