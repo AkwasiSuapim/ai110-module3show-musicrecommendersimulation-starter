@@ -192,9 +192,11 @@ Read and complete the model card here:
 
 [**Model Card**](model_card.md)
 
-The biggest lesson was understanding that a recommendation is really a structured comparison between user preferences and item features. The project turned raw song data into predictions by converting genre, mood, energy, and danceability into a weighted score, then ranking the catalog from strongest to weakest match. That made it clear that a recommendation is not universally good; it only looks good when it fits the chosen profile.
 
-I also learned that simple scoring rules can feel personalized while still being very limited. Exact matching, feature weights, and a small dataset can all introduce bias, and that is why the results needed to be checked with both pytest and the real CLI output. AI helped with planning, implementation, testing, and refactoring, but the final behavior still had to be verified carefully so the documentation matched what the program actually did.
+My biggest learning moment was understanding the difference between scoring one song and ranking the full catalog. The scoring function measures how well one song matches a user, while the ranking function compares all the scores and places the strongest matches first. I also learned that a song is not automatically a good recommendation for everyone. Its value depends on the preferences of the individual user.
+
+AI tools helped me brainstorm the system design, scoring rules, tests, edge cases, refactoring, and documentation. However, I still had to double-check the AI-generated work. Some tests initially failed, and the command-line program later revealed a mismatch between the result structure and the way `main.py` displayed it. Pytest and CLI verification helped me find and correct these problems. I was surprised that a simple weighted algorithm could still make the results feel personalized. If I extended the project, I would allow the profile to learn from likes, skips, saves, and replays, while also adding partial matches and more diverse recommendations.
+
 
 
 
