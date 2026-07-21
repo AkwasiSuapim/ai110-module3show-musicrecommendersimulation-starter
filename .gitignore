@@ -13,3 +13,8 @@ venv/
 
 # Pytest cache
 .pytest_cache/
+graphify-out/
+image.png
+image-1.png
+image-2.png
+*.pyc
